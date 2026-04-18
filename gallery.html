@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Astra — Gallery</title>
+  <link rel="icon" href="Screenshot 2026-04-18 205503.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Surprising Gallery UI Upgrade */
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-auto-rows: 240px;
+        gap: 20px;
+        grid-auto-flow: dense;
+        padding: 20px;
+    }
+
+    .gallery-item {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid var(--clr-border);
+        background: var(--clr-surface);
+        display: block;
+        transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        cursor: pointer;
+        transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+        transform-style: preserve-3d;
+    }
+
+    .gallery-item:hover {
+        transform: perspective(1000px) translateY(-10px) rotateX(2deg) rotateY(-2deg);
+        border-color: var(--clr-accent);
+        box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3), 0 0 20px rgba(139, 92, 246, 0.2) inset;
+        z-index: 10;
+    }
+
+    .gallery-item img, .gallery-item video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease;
+        filter: brightness(0.9) saturate(1.1);
+    }
+
+    .gallery-item:hover img, .gallery-item:hover video {
+        transform: scale(1.12);
+        filter: brightness(1.1) saturate(1.3);
+    }
+
+    .gallery-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(10, 10, 15, 0.9) 0%, rgba(139, 92, 246, 0.4) 40%, transparent 80%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 24px;
+        pointer-events: none;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+    }
+
+    .overlay-text {
+        color: #fff;
+        font-family: var(--ff-heading);
+        font-weight: 700;
+        font-size: 1.2rem;
+        transform: translateY(20px);
+        transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .overlay-sub {
+        color: var(--clr-accent-3);
+        font-size: 0.9rem;
+        font-weight: 500;
+        transform: translateY(20px);
+        transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        transition-delay: 0.05s;
+    }
+
+    .gallery-item:hover .overlay-text,
+    .gallery-item:hover .overlay-sub {
+        transform: translateY(0);
+    }
+
+    /* Masonry dynamic spans */
+    .span-col-2 { grid-column: span 2; }
+    .span-row-2 { grid-row: span 2; }
+    
+    @media (max-width: 768px) {
+        .span-col-2 { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ NAVBAR ============ -->
+  <nav id="navbar" class="navbar scrolled">
+    <div class="nav-inner">
+      <a href="index.html#hero" class="nav-logo" id="nav-logo">
+        <img src="Screenshot 2026-04-18 205503.png" alt="Team Astra Logo" class="nav-logo-img" />
+        <span class="nav-logo-text">Team Astra</span>
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html#about" class="nav-link">About</a></li>
+        <li><a href="index.html#achievements" class="nav-link">Achievements</a></li>
+        <li><a href="index.html#domains" class="nav-link">Domains</a></li>
+        <li><a href="index.html#connect" class="nav-link">Connect</a></li>
+        <li><a href="gallery.html" class="nav-link" style="color: var(--clr-text); border-bottom: 2px solid var(--clr-accent);">Gallery</a></li>
+      </ul>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============ GALLERY HEADER ============ -->
+  <section class="section" style="padding-top: 150px; background: var(--clr-bg); text-align: center;">
+    <div class="container">
+      <div class="section-label reveal">Visuals</div>
+      <h2 class="section-title reveal" style="font-size: clamp(2.5rem, 6vw, 4.5rem); background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Astra In Action</h2>
+      <p class="reveal" style="color: var(--clr-text-muted); max-width: 600px; margin: 0 auto 50px; font-size: 1.1rem;">A cinematic look into our flight tests, structural fabrications, and the relentless pursuit of aerospace innovation.</p>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY GRID ============ -->
+  <section class="section gallery" style="padding-top: 0; background: var(--clr-bg); min-height: 50vh;">
+    <div class="container">
+      <div class="gallery-grid">
+
+        <!-- Media Items with Varied Spans for Masonry Effect -->
+        <div class="gallery-item span-col-2 span-row-2 reveal">
+            <img src="photos and videos/11.jpg" alt="Team Astra Drone" loading="lazy" />
+            <div class="gallery-overlay">
+                <span class="overlay-text">Flight Testing</span>
+                <span class="overlay-sub">Autonomous Navigation</span>
+            </div>
+        </div>
+
+        <div class="gallery-item reveal">
+            <video src="photos and videos/20231023_120742.mp4" autoplay loop muted playsinline></video>
+            <div class="gallery-overlay">
+                <span class="overlay-text">Hover Dynamics</span>
+                <span class="overlay-sub">Stability Test</span>
+            </div>
+        </div>
+
+        <div class="gallery-item span-row-2 reveal">
+            <img src="photos and videos/20231104_011208.jpg" alt="Fabrication" loading="lazy" />
+            <div class="gallery-overlay">
+                <span class="overlay-text">Late Night Fabrication</span>
+                <span class="overlay-sub">Structural Integrity</span>
+            </div>
+        </div>
+
+        <div class="gallery-item span-col-2 reveal">
+            <img src="photos and videos/20231104_151605.jpg" alt="Pre-Flight" loading="lazy" />
+            <div class="gallery-overlay">
+                <span class="overlay-text">Pre-Flight Checks</span>
+                <span class="overlay-sub">Avionics Calibration</span>
+            </div>
+        </div>
+
+        <div class="gallery-item reveal">
+            <img src="photos and videos/20231104_151922.jpg" alt="Takeoff" loading="lazy" />
+            <div class="gallery-overlay">
+                <span class="overlay-text">Lift Off</span>
+                <span class="overlay-sub">AeroTHON Launch</span>
+            </div>
+        </div>
+
+        <div class="gallery-item span-row-2 reveal">
+            <img src="photos and videos/20231104_152540_001.jpg" alt="Mid-Air" loading="lazy" />
+            <div class="gallery-overlay">
+                <span class="overlay-text">Aerial Dominance</span>
+                <span class="overlay-sub">Payload Delivery</span>
+            </div>
+        </div>
+
+        <div class="gallery-item reveal">
+            <img src="photos and videos/20231105_155848.jpg" alt="Team Work" loading="lazy" />
+            <div class="gallery-overlay">
+                <span class="overlay-text">The Squad</span>
+                <span class="overlay-sub">Debriefing</span>
+            </div>
+        </div>
+
+        <div class="gallery-item span-col-2 reveal">
+            <img src="photos and videos/20231113_202451.jpg" alt="Drone Close-up" loading="lazy" />
+            <div class="gallery-overlay">
+                <span class="overlay-text">Engineering Precision</span>
+                <span class="overlay-sub">Carbon Fiber Chassis</span>
+            </div>
+        </div>
+
+        <div class="gallery-item reveal">
+            <img src="photos and videos/20231118_062647.jpg" alt="Dawn Flight" loading="lazy" />
+            <div class="gallery-overlay">
+                <span class="overlay-text">Dawn Testing</span>
+                <span class="overlay-sub">Pushing Limits</span>
+            </div>
+        </div>
+
+        <div class="gallery-item span-col-2 reveal">
+            <img src="photos and videos/20231118_172200.jpg" alt="Sunset Aerial" loading="lazy" />
+            <div class="gallery-overlay">
+                <span class="overlay-text">Dusk Flight</span>
+                <span class="overlay-sub">Aerodynamic Excellence</span>
+            </div>
+        </div>
+
+        <div class="gallery-item reveal">
+            <img src="photos and videos/20231118_172207.jpg" alt="Victory" loading="lazy" />
+            <div class="gallery-overlay">
+                <span class="overlay-text">Mission Complete</span>
+                <span class="overlay-sub">Team Astra</span>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <img src="Screenshot 2026-04-18 205503.png" alt="Team Astra Logo" class="footer-logo-img" />
+        <span class="footer-logo-text">Team Astra</span>
+      </div>
+      <p class="footer-text">IIITDM Kancheepuram &bull; SAEINDIA Collegiate Club</p>
+      <p class="footer-copy">&copy; 2026 Team Astra. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
